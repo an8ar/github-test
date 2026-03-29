@@ -1,15 +1,53 @@
 import { useEffect, useRef } from 'react'
+import { getSearchUserElementId, getUsersFromPages } from '../lib/utils'
 import { useSuspenseSearchGithubUsersQuery } from '../api/use-search-github-users-query'
-import { getUsersFromPages } from '../lib/utils'
 import { SearchUsersRow } from './search-users-row'
 import { SearchUsersStatus } from './search-users-status'
 import type { SearchUsersResultsProps } from './types'
 
-export function SearchUsersResults({ normalizedQuery, onSelect }: SearchUsersResultsProps) {
+export function SearchUsersResults({
+  normalizedQuery,
+  onRestoreComplete,
+  query,
+  selectedUser,
+}: SearchUsersResultsProps) {
   const loadMoreRef = useRef<HTMLDivElement | null>(null)
   const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useSuspenseSearchGithubUsersQuery(normalizedQuery)
   const users = getUsersFromPages(data)
+
+  useEffect(() => {
+    if (!selectedUser) {
+      return
+    }
+
+    const selectedUserElement = document.getElementById(getSearchUserElementId(selectedUser))
+
+    if (selectedUserElement) {
+      selectedUserElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      })
+      onRestoreComplete()
+      return
+    }
+
+    if (hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage()
+      return
+    }
+
+    if (!hasNextPage && !isFetchingNextPage) {
+      onRestoreComplete()
+    }
+  }, [
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    onRestoreComplete,
+    selectedUser,
+    users.length,
+  ])
 
   useEffect(() => {
     const node = loadMoreRef.current
@@ -63,7 +101,7 @@ export function SearchUsersResults({ normalizedQuery, onSelect }: SearchUsersRes
 
       <div className="overflow-hidden rounded-xl border border-border/70 bg-background">
         {users.map((user, index) => (
-          <SearchUsersRow key={user.id} index={index} onSelect={onSelect} user={user} />
+          <SearchUsersRow key={user.id} index={index} query={query} user={user} />
         ))}
 
         {hasNextPage && (

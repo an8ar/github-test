@@ -7,7 +7,8 @@ import { SearchUsersResults } from './search-users-results'
 import { SearchUsersResultsSkeleton } from './search-users-results-skeleton'
 
 export function SearchUsers() {
-  const { query, setQuery, normalizedQuery, shouldShowResults } = useSearchUsers()
+  const { clearSelectedUser, normalizedQuery, query, selectedUser, setQuery, shouldShowResults } =
+    useSearchUsers()
 
   return (
     <div className="space-y-3">
@@ -27,7 +28,12 @@ export function SearchUsers() {
 
       {shouldShowResults && (
         <Suspense fallback={<SearchUsersResultsSkeleton />}>
-          <SearchUsersResults normalizedQuery={normalizedQuery} onSelect={() => setQuery('')} />
+          <SearchUsersResults
+            normalizedQuery={normalizedQuery}
+            onRestoreComplete={clearSelectedUser}
+            query={query}
+            selectedUser={selectedUser}
+          />
         </Suspense>
       )}
     </div>

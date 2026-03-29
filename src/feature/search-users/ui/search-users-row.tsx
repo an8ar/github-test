@@ -1,18 +1,26 @@
 import { Link } from 'react-router-dom'
 import { prefetchUserProfile } from '@/entity/user'
+import { getSearchUserElementId } from '../lib/utils'
+import type { UserDetailsLocationState } from '@/shared/types/navigation'
 import type { SearchUsersRowProps } from './types'
 
-export function SearchUsersRow({ index, onSelect, user }: SearchUsersRowProps) {
+export function SearchUsersRow({ index, query, user }: SearchUsersRowProps) {
+  const state: UserDetailsLocationState = {
+    searchQuery: query,
+    selectedUser: user.login,
+  }
+
   return (
     <Link
+      id={getSearchUserElementId(user.login)}
       className="flex items-center gap-3 px-3 py-3 transition hover:bg-muted/60"
-      onClick={onSelect}
       onFocus={() => {
         void prefetchUserProfile(user.login)
       }}
       onMouseEnter={() => {
         void prefetchUserProfile(user.login)
       }}
+      state={state}
       to={`/user/${user.login}`}
     >
       <img

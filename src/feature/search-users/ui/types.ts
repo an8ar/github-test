@@ -2,12 +2,14 @@ import type { GithubUserSearchItem } from '@/entity/user'
 
 export type SearchUsersResultsProps = {
   normalizedQuery: string
-  onSelect: () => void
+  onRestoreComplete: () => void
+  query: string
+  selectedUser: string
 }
 
 export type SearchUsersRowProps = {
   index: number
-  onSelect: () => void
+  query: string
   user: GithubUserSearchItem
 }
 

@@ -24,6 +24,10 @@ export function getUsersFromPages(data?: SearchGithubUsersPages) {
   return data?.pages.flatMap((page) => page.items) ?? []
 }
 
+export function getSearchUserElementId(login: string) {
+  return `search-user-${login}`
+}
+
 function getUsersMatchLabel(usersCount: number) {
   return usersCount === 1 ? 'match' : 'matches'
 }
