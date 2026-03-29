@@ -56,4 +56,10 @@ export default defineConfig([
       'react/self-closing-comp': 'error',
     },
   },
+  {
+    files: ['src/components/ui/**/*.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])
