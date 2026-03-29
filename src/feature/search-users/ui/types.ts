@@ -16,3 +16,11 @@ export type SearchUsersRowProps = {
 export type SearchUsersStatusProps = {
   statusText: string
 }
+
+export type SearchUsersListProps = {
+  hasNextPage: boolean
+  isFetchingNextPage: boolean
+  loadMoreRef: React.RefObject<HTMLDivElement | null>
+  query: string
+  users: GithubUserSearchItem[]
+}

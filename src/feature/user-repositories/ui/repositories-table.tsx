@@ -48,27 +48,36 @@ export function RepositoriesTable({ flexRender, isUpdating, table }: Repositorie
 function RepositoriesTableHeaderCell({ flexRender, header }: RepositoriesTableHeaderCellProps) {
   const canSort = header.column.getCanSort()
   const sortDirection = header.column.getIsSorted()
+  const headerContent = flexRender(header.column.columnDef.header, header.getContext())
+
+  if (header.isPlaceholder) {
+    return (
+      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground" />
+    )
+  }
+
+  if (!canSort) {
+    return (
+      <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+        <span>{headerContent}</span>
+      </th>
+    )
+  }
 
   return (
     <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-      {header.isPlaceholder && null}
-      {!header.isPlaceholder && !canSort && (
-        <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
-      )}
-      {!header.isPlaceholder && canSort && (
-        <button
-          className="inline-flex items-center gap-2 text-left transition hover:text-foreground"
-          onClick={header.column.getToggleSortingHandler()}
-          type="button"
-        >
-          <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
-          <ArrowDownUp className="size-3.5" />
-          <span className="text-[10px] normal-case tracking-normal text-muted-foreground">
-            {sortDirection === 'asc' && 'Asc'}
-            {sortDirection === 'desc' && 'Desc'}
-          </span>
-        </button>
-      )}
+      <button
+        className="inline-flex items-center gap-2 text-left transition hover:text-foreground"
+        onClick={header.column.getToggleSortingHandler()}
+        type="button"
+      >
+        <span>{headerContent}</span>
+        <ArrowDownUp className="size-3.5" />
+        <span className="text-[10px] normal-case tracking-normal text-muted-foreground">
+          {sortDirection === 'asc' && 'Asc'}
+          {sortDirection === 'desc' && 'Desc'}
+        </span>
+      </button>
     </th>
   )
 }

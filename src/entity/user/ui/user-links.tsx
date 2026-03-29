@@ -29,7 +29,7 @@ export function UserLinks({ user }: UserLinksProps) {
           >
             Open on GitHub
           </a>
-          {blogUrl ? (
+          {blogUrl && (
             <a
               className="inline-flex items-center rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition hover:bg-muted"
               href={blogUrl}
@@ -38,7 +38,7 @@ export function UserLinks({ user }: UserLinksProps) {
             >
               Personal site
             </a>
-          ) : null}
+          )}
         </dd>
       </div>
     </dl>
